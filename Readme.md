@@ -1,4 +1,4 @@
-# photostory
+  # photostory
 
 <img src="photo-selector/assets/photostory.svg" alt="Icon" width="160px"/>
 
@@ -67,3 +67,4 @@ Now you have the opportunity to customize the slideshow in 3D using Blender. The
 #### photo-selector:
 
 * Show progress when rendering / opening Blender
+* Widget to select GPS locations with OSM

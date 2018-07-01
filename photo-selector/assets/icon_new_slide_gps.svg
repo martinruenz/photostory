@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="32px"
+   version="1.1"
+   viewBox="0 0 32 32"
+   width="32px"
+   id="svg11"
+   sodipodi:docname="icon_new_slide_gps.svg"
+   inkscape:version="0.92.3 (unknown)">
+  <metadata
+     id="metadata15">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1025"
+     id="namedview13"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="32.841374"
+     inkscape:cy="11.94189"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="icon-81-document-add"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <desc
+     id="desc4" />
+  <defs
+     id="defs6" />
+  <g
+     fill="none"
+     fill-rule="evenodd"
+     id="Page-1"
+     stroke="none"
+     stroke-width="1">
+    <g
+       fill="#157EFB"
+       id="icon-81-document-add"
+       style="fill:#000000;fill-opacity:1">
+      <path
+         style="fill:#ffffff;fill-opacity:1"
+         d="M 7.0078125 2 C 5.8985319 2 5 2.8988209 5 4.0078125 L 5 26.992188 C 5 28.100805 5.8915504 29 6.9980469 29 L 16.021484 29 C 15.374663 27.9897 15 26.788642 15 25.5 C 15 21.910149 17.910149 19 21.5 19 C 22.385901 19 23.230408 19.177112 24 19.498047 L 24 10 L 19.005859 10 C 17.898021 10 17 9.1133481 17 8.0019531 L 17 2 L 7.0078125 2 z M 18 2 L 18 7.9980469 C 18 8.5519494 18.450432 9 18.990234 9 L 24 9 L 18 2 z M 11.169922 10.466797 C 12.958088 10.466797 14.408203 11.917019 14.408203 13.705078 C 14.408203 14.470356 14.141043 15.172382 13.697266 15.726562 C 12.861299 16.770713 11.681511 18.246092 11.296875 18.726562 C 11.266225 18.764983 11.219134 18.787109 11.169922 18.787109 C 11.120817 18.787001 11.073727 18.764875 11.042969 18.726562 C 10.658117 18.245984 9.4765921 16.770604 8.640625 15.726562 L 8.6425781 15.726562 C 8.1992328 15.172598 7.9316406 14.469816 7.9316406 13.705078 C 7.9316406 11.917019 9.3818631 10.466797 11.169922 10.466797 z M 11.169922 11.113281 C 9.7417844 11.113281 8.5800781 12.276833 8.5800781 13.705078 C 8.5800781 14.298975 8.7753392 14.856571 9.1464844 15.320312 C 9.1527439 15.328192 9.1600799 15.337609 9.1660156 15.345703 L 9.1855469 15.371094 L 11.169922 17.847656 L 13.173828 15.345703 C 13.179872 15.337501 13.185147 15.330144 13.191406 15.322266 C 13.562983 14.858415 13.759766 14.299299 13.759766 13.705078 C 13.759766 12.276833 12.598059 11.113281 11.169922 11.113281 z M 11.169922 12.570312 A 1.1331854 1.1331854 0 0 1 12.302734 13.705078 A 1.1331854 1.1331854 0 0 1 11.169922 14.837891 A 1.1331854 1.1331854 0 0 1 10.037109 13.705078 A 1.1331854 1.1331854 0 0 1 11.169922 12.570312 z M 21.5 20 C 18.462434 20 16 22.462434 16 25.5 C 16 28.537566 18.462434 31 21.5 31 C 24.537566 31 27 28.537566 27 25.5 C 27 22.462434 24.537566 20 21.5 20 z M 21 22 L 22 22 L 22 25 L 25 25 L 25 26 L 22 26 L 22 29 L 21 29 L 21 26 L 18 26 L 18 25 L 21 25 L 21 22 z "
+         id="document-add" />
+      <g
+         id="g4789"
+         transform="matrix(0.10792242,0,0,0.10792242,6.961058,10.417965)" />
+    </g>
+    <g
+       id="g4708"
+       transform="matrix(0.75822708,0,0,0.75822708,-23.965545,-31.942866)">
+      <g
+         style="fill:#cccccc"
+         transform="matrix(0.02699285,0,0,0.02699285,40.224844,54.136047)"
+         id="g3">
+        <g
+           style="fill:#cccccc"
+           id="g5" />
+      </g>
+    </g>
+  </g>
+</svg>

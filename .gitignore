@@ -1,0 +1,8 @@
+.idea/
+io_photostory/__pycache__/
+*.blend1
+*.blend2
+tests/*
+assets/*
+*.ipynb_checkpoints
+

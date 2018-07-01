@@ -1,0 +1,6 @@
+*.user
+Debug/
+Release/
+build/
+third_party/
+Default/

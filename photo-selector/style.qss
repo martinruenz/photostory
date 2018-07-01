@@ -1,0 +1,122 @@
+QMainWindow * {
+    font-family: "Ubuntu";
+}
+
+QWidget {
+    background-color: #1b252f;
+    color: #ffffff;
+}
+
+QLabel {
+    background-color: none;
+    font-weight: bold;
+}
+
+QPushButton {
+    border: 0px;
+    border-style: solid;
+    border-radius:2;
+    /*
+    min-width: 46;
+    min-height: 46;
+    max-width: 46;
+    max-height: 46;
+    */
+    /*qproperty-cursor: hand;*/
+}
+
+QPushButton:hover {
+    background-color: #157efb;
+}
+
+/*
+#scrollAreal QWidget {
+    background-color: #212f3c;
+}
+#areaSlides QWidget {
+    background-color: #ffffff;
+}*/
+
+
+/**************
+/ SlideContainer
+***************/
+
+QScrollBar {}
+QScrollBar:horizontal {
+    height: 15px;
+    border: 1px;
+    border-style: solid;
+    border-radius: 7px;
+}
+QScrollBar::handle:horizontal {
+    background: #ffffff;
+    min-height: 0px;
+    border-radius: 4px;
+    margin: 2px;
+}
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0px;
+}
+QScrollArea {
+    border: 1px;
+}
+
+
+/**************
+/ SlideWidget
+***************/
+
+QWidget#SlideWidget { background-color: #212f3c; }
+QWidget#SlideWidget #btnLeft { qproperty-icon: url(:/assets/icon_left.svg); }
+QWidget#SlideWidget #btnRight { qproperty-icon: url(:/assets/icon_right.svg); }
+QWidget#SlideWidget #btnRemove { qproperty-icon: url(:/assets/icon_x.svg); }
+QWidget#SlideWidget QPushButton { margin: 2px; }
+QWidget#SlideWidget DropArea {
+    background-color: #15191c;
+    background-image: url(:/assets/icon_images.svg);
+    background-repeat: no-repeat, no-repeat;
+    background-position: center;
+}
+
+/*QWidget#SlideWidget DropArea:hover {
+    background-image: url(:/assets/icon_images_hover.svg);
+}*/
+/*QWidget#SlideWidget DropArea QLabel {
+    qproperty-pixmap: url(:/assets/icon_images.svg);
+}*/
+
+
+/**************
+/ Sidebar
+***************/
+
+QPushButton#btnAddSlide {
+    qproperty-icon: url(:/assets/icon_new_slide_photo.svg);
+    qproperty-iconSize: 60px;
+}
+
+QPushButton#btnAddSlideGPS {
+    qproperty-icon: url(:/assets/icon_new_slide_gps.svg);
+    qproperty-iconSize: 60px;
+}
+
+QPushButton#btnExport {
+    qproperty-icon: url(:/assets/icon_export.svg);
+    qproperty-iconSize: 60px;
+}
+
+QPushButton#btnImport {
+    qproperty-icon: url(:/assets/icon_import.svg);
+    qproperty-iconSize: 60px;
+}
+
+QPushButton#btnBlender {
+    qproperty-icon: url(:/assets/icon_to_blender.svg);
+    qproperty-iconSize: 60px;
+}
+
+QPushButton#btnCompute {
+    qproperty-icon: url(:/assets/icon_compute.svg);
+    qproperty-iconSize: 60px;
+}

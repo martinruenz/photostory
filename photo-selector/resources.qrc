@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/icon_new_slide.svg</file>
+        <file>assets/icon_new_slide_photo.svg</file>
+        <file>assets/icon_new_slide_gps.svg</file>
+        <file>assets/icon_no_thumb.png</file>
+	<file>assets/icon_compute.svg</file>
+	<file>assets/icon_export.svg</file>
+	<file>assets/icon_import.svg</file>
+        <file>assets/icon_images.svg</file>
+        <file>assets/icon_images_hover.svg</file>
+	<file>assets/icon_left.svg</file>
+        <file>assets/icon_right.svg</file>
+        <file>assets/icon_to_blender.svg</file>
+        <file>assets/icon_x.svg</file>
+        <file>assets/photostory.svg</file>
+        <file>style.qss</file>
+    </qresource>
+</RCC>

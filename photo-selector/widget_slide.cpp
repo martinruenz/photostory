@@ -16,6 +16,8 @@
 // ====================================================================
 
 #include <QJsonObject>
+#include <QFileInfo>
+#include <QDir>
 
 #include "widget_slide.h"
 #include "ui_widget_slide.h"
@@ -53,6 +55,13 @@ QJsonObject SlideWidget::toJson() const{
     return json;
 }
 
-void SlideWidget::fromJson(const QJsonObject *json) {
+void SlideWidget::fromJson(const QJsonObject *json, const QString&) {
     setName((*json)["name"].toString());
+}
+
+QString SlideWidget::getPathFromJson(const QString& p, const QString& json_path){
+    QFileInfo info(p);
+    if(info.isAbsolute()) return p;
+    QDir json_dir(QFileInfo(json_path).dir());
+    return json_dir.absoluteFilePath(p);
 }

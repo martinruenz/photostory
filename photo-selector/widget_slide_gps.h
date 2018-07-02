@@ -26,13 +26,13 @@ class SlideWidgetGPS : public SlideWidget{
     Q_OBJECT
 
 public:
-    explicit SlideWidgetGPS(QWidget *parent = 0);
+    explicit SlideWidgetGPS(QWidget *parent = nullptr);
 
     std::vector<QString> getCoordinates() const;
     void addCoordinate(const QString& coord);
 
     virtual QJsonObject toJson() const;
-    virtual void fromJson(const QJsonObject* json);
+    virtual void fromJson(const QJsonObject* json, const QString& json_path=QString());
 
 protected:
 

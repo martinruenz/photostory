@@ -41,7 +41,7 @@ public:
     size_t countSlides() const;
 
     SlideWidget* createSlide(SlideWidget::SlideType type = SlideWidget::SlideType::PHOTO);
-    SlideWidget* createSlide(const QJsonObject* json);
+    SlideWidget* createSlide(const QJsonObject* json, const QString& json_path=QString());
     void addSlide(SlideWidget* slide);
     QJsonObject slideToJson(SlideWidget* slide) const;
 

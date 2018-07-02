@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow){
     ui->setupUi(this);
-    slideLayout = (QHBoxLayout*)ui->areaSlides->layout();
+    slideLayout = dynamic_cast<QHBoxLayout*>(ui->areaSlides->layout());
 
     addSlide(createSlide());
 }
@@ -43,7 +43,9 @@ MainWindow::~MainWindow(){
 }
 
 size_t MainWindow::countSlides() const{
-    return slideLayout->count();
+    int cnt = slideLayout->count();
+    if(cnt < 0) throw std::runtime_error("Unexpected return value of QHBoxLayout::count()");
+    return size_t(cnt);
 }
 
 SlideWidget* MainWindow::createSlide(SlideWidget::SlideType type){
@@ -55,21 +57,18 @@ SlideWidget* MainWindow::createSlide(SlideWidget::SlideType type){
     case SlideWidget::SlideType::GPS:
         widget = new SlideWidgetGPS();
         break;
-    default:
-        throw std::invalid_argument("Invalid slide type.");
-        break;
     }
     widget->setName(QString::number(countSlides()+1));
     return widget;
 }
 
-SlideWidget* MainWindow::createSlide(const QJsonObject* json){
+SlideWidget* MainWindow::createSlide(const QJsonObject* json, const QString& json_path){
     SlideWidget* widget;
     QString type = (*json)["type"].toString();
     if(type == "photo_slide") widget = new SlideWidgetPhoto();
     else if(type == "gps_slide") widget = new SlideWidgetGPS();
     else throw std::invalid_argument("Invalid slide type.");
-    widget->fromJson(json);
+    widget->fromJson(json, json_path);
     return widget;
 }
 
@@ -82,7 +81,7 @@ void MainWindow::addSlide(SlideWidget* slide){
 void MainWindow::saveJson(QFile* file) const {
     QJsonArray json_slides;
     for (int i = 0; i < slideLayout->count(); ++i) {
-        SlideWidget* slide = (SlideWidget*)slideLayout->itemAt(i)->widget();
+        SlideWidget* slide = dynamic_cast<SlideWidget*>(slideLayout->itemAt(i)->widget());
         json_slides.append(slide->toJson());
     }
 
@@ -284,6 +283,6 @@ void MainWindow::on_btnImport_clicked(){
     QJsonArray json_slides = json_root["slides"].toArray();
     for(const QJsonValue& slide : json_slides){
         QJsonObject obj = slide.toObject();
-        addSlide(createSlide(&obj));
+        addSlide(createSlide(&obj, filename));
     }
 }

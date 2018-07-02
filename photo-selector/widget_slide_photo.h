@@ -26,7 +26,7 @@ class SlideWidgetPhoto : public SlideWidget{
     static const std::vector<QString> supported_extensions;
 
 public:
-    explicit SlideWidgetPhoto(QWidget *parent = 0);
+    explicit SlideWidgetPhoto(QWidget *parent = nullptr);
 
     std::vector<QString> getForegroundPaths() const;
     std::vector<QString> getBackgroundPaths() const;
@@ -34,7 +34,7 @@ public:
     void addBackgroundPath(const QString& path);
 
     virtual QJsonObject toJson() const;
-    virtual void fromJson(const QJsonObject* json);
+    virtual void fromJson(const QJsonObject* json, const QString& json_path=QString());
 
 protected:
 

@@ -31,7 +31,7 @@ public:
 
     enum class SlideType { GPS, PHOTO } slide_type;
 
-    explicit SlideWidget(QWidget *parent = 0);
+    explicit SlideWidget(QWidget *parent = nullptr);
     virtual ~SlideWidget();
 
     void setName(const QString& name);
@@ -40,9 +40,14 @@ public:
     void setMoveCallback(const std::function<void(int)>& f);
     void setRemoveCallback(const std::function<void()>& f);
 
+    /// serialize slide to JSON
     virtual QJsonObject toJson() const;
-    virtual void fromJson(const QJsonObject* json);
+
+    /// load content of slide from JSON. json_path can be provided to fix relative paths
+    virtual void fromJson(const QJsonObject* json, const QString& json_path=QString());
 
 protected:
     Ui::SlideWidget *ui;
+
+    QString getPathFromJson(const QString& p, const QString& json_path);
 };

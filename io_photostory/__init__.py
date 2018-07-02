@@ -303,14 +303,15 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
         # Load all images/videos (no duplicates)
         print("- Loading images/videos ({} unique of {} paths) ...".format(len(images_paths), num_image_paths))
         for p in images_paths:
-            if p in self.images and self.images[p] is not None:
+            path = os.path.abspath(p)
+            if path in self.images and self.images[path] is not None:
                 continue
-            img = load_image(p, None, recursive=False)
+            img = load_image(path, None, recursive=False)
             if img is not None:
-                self.images[p] = img
-                print("-- Loaded:", p)
+                self.images[path] = img
+                print("-- Loaded:", path)
             else:
-                warn = "Loadind image {} failed".format(p)
+                warn = "Loadind image {} failed".format(path)
                 print("WARNING", warn)
                 self.report({'WARNING'}, warn)
 
@@ -385,8 +386,8 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
 
                 print(type(current_frame), type(num_frames), type(self.duplicate_frames))
 
-                # Identify duplicate frames
-                if end_location == start_location:
+                # Identify duplicate / identical frames
+                if end_location == start_location and not slide.has_video():
                     self.duplicate_frames += list(range(int(current_frame - num_frames + 1), int(current_frame)))
 
                 # Insert keyframe for end location
@@ -447,10 +448,10 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
         # Add photos to slide
         for p in slide_desc["foreground_paths"]:
             # print("Appending photo: ", self.images[p])
-            slide.photos.append(Photo(self.images[p]))
+            slide.photos.append(Photo(self.images[os.path.abspath(p)]))
         for p in slide_desc["background_paths"]:
             # print("Appending photo: ", self.images[p])
-            slide.photos_background.append(Photo(self.images[p]))
+            slide.photos_background.append(Photo(self.images[os.path.abspath(p)]))
 
         # Create layout
         slide.generate_layout(self.canvas)

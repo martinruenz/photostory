@@ -65,12 +65,12 @@ QJsonObject SlideWidgetPhoto::toJson() const {
     return json;
 }
 
-void SlideWidgetPhoto::fromJson(const QJsonObject *json) {
+void SlideWidgetPhoto::fromJson(const QJsonObject *json, const QString& json_path) {
     SlideWidget::fromJson(json);
     if(foreground_area.count() || background_area.count()) throw std::runtime_error("Calling 'fromJson' of non-empty 'SlideWidgetPhoto'.");
 
     QJsonArray jsonFgPaths = (*json)["foreground_paths"].toArray();
     QJsonArray jsonBgPaths = (*json)["background_paths"].toArray();
-    for(const auto& p : jsonFgPaths) addForegroundPath(p.toString());
-    for(const auto& p : jsonBgPaths) addBackgroundPath(p.toString());
+    for(const auto& p : jsonFgPaths) addForegroundPath(getPathFromJson(p.toString(), json_path));
+    for(const auto& p : jsonBgPaths) addBackgroundPath(getPathFromJson(p.toString(), json_path));
 }

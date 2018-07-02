@@ -50,7 +50,7 @@ QJsonObject SlideWidgetGPS::toJson() const {
     return json;
 }
 
-void SlideWidgetGPS::fromJson(const QJsonObject *json) {
+void SlideWidgetGPS::fromJson(const QJsonObject *json, const QString&) {
     SlideWidget::fromJson(json);
     if(gps_coordinates.count()) throw std::runtime_error("Calling 'fromJson' of non-empty 'SlideWidgetGPS'.");
     QJsonArray coordinates = (*json)["gps_coordinates"].toArray();

@@ -58,6 +58,8 @@ And here is the result after rendering:
 
 [![Figure of example](figures/thumb_example.png "Click me to see a video.")](https://www.martinruenz.de/media/photostory/demo.webm)
 
+***At this stage, it is recommended to store and import the JSON file manually.***
+
 #### Manual workflow
 
 Instead of rendering the video directly from the GUI it is possible to save the JSON exchange format in order to import it into Blender manually. The resulting file describes slides like this:

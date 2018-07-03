@@ -50,21 +50,41 @@ This will download a texture and height-map of the world for rendering maps.
 
 #### Automatic workflow
 
-The automatic workflow hides details of the manual process away, but obviously gives you fewer settings to adjust. The following self-explanatory recording highlights the automatic procedure:
+The automatic workflow hides details of the manual process away, but obviously gives you fewer settings to adjust. The following video shows how to arrange slides using the `photo-selector`:
+
+[![Figure of photo-selector](figures/thumb_selector.png "Click me to see a video.")](https://www.martinruenz.de/media/photostory/photo-selector.mp4)
+
+And here is the result after rendering:
+
+[![Figure of example](figures/thumb_example.png "Click me to see a video.")](https://www.martinruenz.de/media/photostory/demo.webm)
 
 #### Manual workflow
 
-Instead of rendering the video directly from the GUI it is possible to save the JSON exchange format manually and import it into Blender by selecting **File ➜ Import ➜ Photostory (.json)**.
+Instead of rendering the video directly from the GUI it is possible to save the JSON exchange format in order to import it into Blender manually. The resulting file describes slides like this:
 
-This importer gives you the options:
+```JSON
+{
+    "type": "photo_slide",
+    "name": "3",
+    "background_paths": [],
+    "foreground_paths": [
+        "joshua-earle-560344-unsplash.jpg",
+        "kea-mowat-574639-unsplash.jpg",
+        "pascal-debrunner-634122-unsplash.jpg"
+    ]
+}
+```
+
+In Blender load the slideshow via **File ➜ Import ➜ Photostory (.json)**. This importer gives you the options:
 
 * **Unroll map**: If set, adds an unrolling map animation to the beginning of the scene (see example).
 * **Skip duplicates**: If set, placeholder images for duplicate frames are created in the output directory (this directory needs to be specified in Blender before importing). This will speed up the rendering process significantly as long as the **overwrite** flag in Blender is not set. After rendering, placeholders need to be replaced using the script </br> **photo-selector/generate_duplicates.py**, which replaces empty image files with the previous non-empty image.
 * **Setup scene**: If set, scene properties such as start and end frame are adjusted as well.
 * **Default slide duration**: Default duration of slides (might be overwritten by JSON).
 
-Now you have the opportunity to customize the slideshow in 3D using Blender. The generated scene should work with the internal as well as Cycles renderer. Rendering is done usual, only make sure not to change the output directory if you generated placeholders with be setting *skip duplicates*.
+![blender-import](/figures/cast-import.gif "Importing a slideshow in blender")
 
+Now you have the opportunity to customize the slideshow in 3D using Blender. The generated scene should work with the internal as well as Cycles renderer. Rendering is done usual, only make sure not to change the output directory if you generated placeholders with be setting *skip duplicates*.
 
 ## Todos / Ideas
 

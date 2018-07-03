@@ -217,7 +217,9 @@ void MainWindow::on_btnBlender_clicked(){
 
 
 void MainWindow::on_btnCompute_clicked(){
-    QDir dst = QDir(QFileDialog::getExistingDirectory(this, "Render destination"));
+    QString path = QFileDialog::getExistingDirectory(this, "Render destination");
+    if(path.isEmpty()) return;
+    QDir dst = QDir(path);
     QString blend_path = dst.absoluteFilePath("generated_scene.blend");
     QString dst_path = dst.absolutePath();
 

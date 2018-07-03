@@ -10,7 +10,18 @@
 #### 1. Install dependencies
 
 * Install [Blender](https://blender.org) and make sure that the command `blender` can be executed in your terminal
-* **Optionally**, install *ffmpegthumbnailer*, which is used to show video thumbnails within the *photo-selector* application: `sudo apt-get install ffmpegthumbnailer`
+* Install Qt >= 5.9
+* **Optionally**, use *ffmpegthumbnailer*, which is used to show video thumbnails within the *photo-selector* application:
+```
+mkdir -p photo-selector/third_party
+cd photo-selector/third_party
+git clone --depth=1 https://github.com/dirkvdb/ffmpegthumbnailer.git
+cd ffmpegthumbnailer
+mkdir build
+cd build
+cmake ..
+make -j5
+```
 
 #### 2. Build photo-selector
 
@@ -19,6 +30,8 @@ cd photo-selector
 mkdir build
 cd build
 cmake ..
+# Use something like this instead, if you have a local Qt installation: cmake -DQt5_DIR=/usr/lib/x86_64-linux-gnu/cmake/Qt5 ..
+make -j4
 ```
 
 #### 3. Download assets

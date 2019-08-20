@@ -35,7 +35,7 @@ def create_plane_meshdata(w, h, uv_border=0):
     if uv_border >= 0:
         border_width_u = uv_border
         border_width_v = border_width_u * w / h
-        mesh_data.uv_textures.new()
+        mesh_data.uv_layers.new()
         mesh_data.uv_layers.active.data[0].uv = (-border_width_u, -border_width_v)
         mesh_data.uv_layers.active.data[1].uv = (1 + border_width_u, -border_width_v)
         mesh_data.uv_layers.active.data[2].uv = (1 + border_width_u, 1 + border_width_v)

@@ -19,7 +19,7 @@ bl_info = {
     "name": "Photostory JSON format",
     "author": "Martin Rünz",
     "version": (1, 0, 0),
-    "blender": (2, 78, 0),
+    "blender": (2, 80, 0),
     "location": "File > Import-Export",
     "description": "Import a photostory and generate an according scene",
     "warning": "",
@@ -107,14 +107,14 @@ class Photo(layout.Rectangle):
         for i in range(4):
             mesh.verts[i].select = True
             bpy.ops.transform.translate(override, value=(0, 0, random.random()*max_edge_transition),
-                                        constraint_axis=(False, False, True), constraint_orientation='GLOBAL',
-                                        mirror=False, proportional='ENABLED', proportional_edit_falloff='SHARP',
+                                        constraint_axis=(False, False, True), orient_type='GLOBAL',
+                                        mirror=False, use_proportional_edit=True, proportional_edit_falloff='SHARP',
                                         proportional_size=200)
             mesh.verts[i].select = False
 
         # Finish editing
         leave_editmode()
-        self.object.select = False
+        self.object.select_set(False)
 
 
 class Slide(layout.Size):
@@ -128,7 +128,7 @@ class Slide(layout.Size):
         self.longest_video_frames = 0
         self.json = json
         self.root = bpy.data.objects.new("slide", None)
-        bpy.context.scene.objects.link(self.root)
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(self.root)
 
     def get_type(self):
         return self.json["type"]
@@ -168,9 +168,8 @@ class Slide(layout.Size):
         #     bg_photo.y = p[1] - bg_photo.height / 2
 
     def add_randomization(self, rotation_sigma=0.02):
-        v = get_area_3d().spaces[0]
-        original_pivot = v.pivot_point
-        v.pivot_point = 'MEDIAN_POINT'
+        original_pivot = bpy.context.tool_settings.transform_pivot_point
+        bpy.context.tool_settings.transform_pivot_point = 'MEDIAN_POINT'
         execution_context = get_override('VIEW_3D')
 
         for p in self.photos:
@@ -179,8 +178,8 @@ class Slide(layout.Size):
             enter_editmode(p.object, execution_context)
             bpy.ops.mesh.select_all(execution_context, action='SELECT')
             bpy.ops.transform.rotate(execution_context,
-                                     value=random.normalvariate(0, rotation_sigma), axis=(0, 0, 1), constraint_axis=(False, False, True),
-                                     constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED',
+                                     value=random.normalvariate(0, rotation_sigma), orient_axis='Z', constraint_axis=(False, False, True),
+                                     orient_type='GLOBAL', mirror=False, use_proportional_edit=False,
                                      proportional_edit_falloff='SMOOTH', proportional_size=1)
             bpy.ops.mesh.select_all(execution_context, action='DESELECT')
             leave_editmode()
@@ -191,13 +190,13 @@ class Slide(layout.Size):
             enter_editmode(p.object, execution_context)
             bpy.ops.mesh.select_all(execution_context, action='SELECT')
             bpy.ops.transform.rotate(execution_context, value=random.normalvariate(0, 6 * rotation_sigma),
-                                     axis=(0, 0, 1), constraint_axis=(False, False, True),
-                                     constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED',
+                                     orient_axis='Z', constraint_axis=(False, False, True),
+                                     orient_type='GLOBAL', mirror=False, use_proportional_edit=False,
                                      proportional_edit_falloff='SMOOTH', proportional_size=1)
             bpy.ops.mesh.select_all(execution_context, action='DESELECT')
             leave_editmode()
 
-        v.pivot_point = original_pivot
+        bpy.context.tool_settings.transform_pivot_point = original_pivot
 
 
 class PhotostoryImporter(bpy.types.Operator, ImportHelper):
@@ -254,7 +253,7 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
         cam_data.clip_end = 100000
         self.camera = bpy.data.objects.new("Camera", cam_data)
         self.camera.location = self.camera_origin
-        bpy.context.scene.objects.link(self.camera)
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(self.camera)
 
         # Setup scene
         if self.properties.setup_scene:
@@ -269,12 +268,12 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
 
             # Enable ambient occlusion
             bpy.context.scene.world.light_settings.use_ambient_occlusion = True
-            bpy.context.scene.world.light_settings.ao_blend_type = 'MULTIPLY'
             bpy.context.scene.world.light_settings.ao_factor = 1
             bpy.context.scene.camera = self.camera
 
         # Create lamp
-        bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(0, 0, 5000))
+        if bpy.ops.object.light_add.poll():
+            bpy.ops.object.light_add(type='SUN', location=(0, 0, 5000))
         # bpy.ops.object.lamp_add(type='SUN', view_align=False, location=(0, 0, 5000), layers=(
         #     True, False, False, False, False, False, False, False, False, False, False, False, False, False, False,
         #     False,
@@ -342,13 +341,13 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
 
 
         # Create animation
-        bpy.context.scene.update()
+        bpy.context.view_layer.update()
         for i, slide in enumerate(self.slides):
 
             # Set start location of frame
             # TODO add optional variation
             # previous_camera_location = self.camera.location
-            start_location = slide.root.matrix_world * self.camera_origin
+            start_location = slide.root.matrix_world @ self.camera_origin
             self.camera.location = start_location
             self.camera.keyframe_insert("location", index=-1, frame=current_frame)
             slide.start_videos_at(current_frame)
@@ -492,11 +491,6 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
         # Create material (internal, no nodes)
         material = bpy.data.materials.new(name="photo_material")
         material.specular_intensity = 0
-        mtex = material.texture_slots.add()
-        mtex.texture = photo.texture
-        mtex.texture.extension = 'CLIP'
-        mtex.texture_coords = 'UV'
-        mtex.use_map_color_diffuse = True
         photo.object.data.materials.append(material)
 
         # Add nodes setup as well:
@@ -525,13 +519,14 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
         mat_links.new(node_t.outputs['Alpha'], node_mix.inputs['Fac'])
         mat_links.new(node_mix.outputs['Shader'], node_om.inputs['Surface'])
 
-        # Internal
-        node_m = mat_nodes.new('ShaderNodeMaterial')
-        node_m.location = (0, 500)
-        node_m.material = material
-        node_o = mat_nodes.new('ShaderNodeOutput')
-        node_o.location = (300, 500)
-        mat_links.new(node_m.outputs['Color'], node_o.inputs['Color'])
+        if hasattr(bpy.types, 'ShaderNodeMaterial'):
+            # Internal
+            node_m = mat_nodes.new('ShaderNodeMaterial')
+            node_m.location = (0, 500)
+            node_m.material = material
+            node_o = mat_nodes.new('ShaderNodeOutput')
+            node_o.location = (300, 500)
+            mat_links.new(node_m.outputs['Color'], node_o.inputs['Color'])
 
         if photo.texture.image.source == "MOVIE":
             photo.type = "MOVIE"
@@ -546,7 +541,7 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
         if parent is not None:
             photo.object.parent = parent
 
-        self.scene.objects.link(photo.object)
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(photo.object)
 
     def setup_video_image_user(self, texture, image_user):
         image_user.frame_duration = texture.image.frame_duration - 1  # -1 to avoid white texture at the end of video
@@ -570,7 +565,7 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
             u = bg_width / texture.image.size[0]
 
         # Add uv map
-        mesh_data.uv_textures.new()
+        mesh_data.uv_layers.new()
         mesh_data.uv_layers.active.data[0].uv = (0, 0)
         mesh_data.uv_layers.active.data[1].uv = (u, 0)
         mesh_data.uv_layers.active.data[2].uv = (u, 1)
@@ -579,15 +574,11 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
         # Create material
         material = bpy.data.materials.new(name="bg_material")
         material.specular_intensity = 0
-        mtex = material.texture_slots.add()
-        mtex.texture = texture
-        mtex.texture_coords = 'UV'
-        mtex.use_map_color_diffuse = True
         background.data.materials.append(material)
 
         # Location
         background.location = Vector((-border_x, -border_y, -5))
-        self.scene.objects.link(background)
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(background)
         return background
 
     def create_map(self):
@@ -617,13 +608,13 @@ def menu_func_import(self, context):
 def register():
     bpy.utils.register_class(PhotostoryImporter)
     # bpy.utils.register_class(PhotostoryImporterTestPanel)
-    bpy.types.INFO_MT_file_import.append(menu_func_import)
+    bpy.types.TOPBAR_MT_file_import.append(menu_func_import)
 
 
 def unregister():
     bpy.utils.unregister_class(PhotostoryImporter)
     # bpy.utils.unregister_class(PhotostoryImporterTestPanel)
-    bpy.types.INFO_MT_file_import.remove(menu_func_import)
+    bpy.types.TOPBAR_MT_file_import.remove(menu_func_import)
 
 
 if __name__ == "__main__":

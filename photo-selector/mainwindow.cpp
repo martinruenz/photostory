@@ -119,10 +119,9 @@ bool MainWindow::saveBlend(const QString& blend_path,
 
     // Open blender process
     QStringList arguments;
-    QString pscript("import bpy; bpy.ops.wm.read_homefile(use_empty=True); " +
+    QString pscript("import bpy; " +
                     getPythonPhotostoryOp(file->fileName(), output_path, setup_scene, create_placeholders) +
-                    "bpy.ops.wm.save_as_mainfile(filepath='"+blend_path+"');");
-    arguments << "--background" << "--python-expr" << pscript;
+                    "bpy.ops.wm.save_as_mainfile(filepath='"+blend_path+"'); bpy.ops.wm.quit_blender();");
     auto process = startBlender(arguments);
     if(!process) return false;
     std::cout << "Generating scene ... ";
@@ -151,7 +150,7 @@ bool MainWindow::openInBlender() {
 
     // Open blender process
     QStringList arguments;
-    arguments << "--python-expr" << QString("import bpy; bpy.ops.wm.read_homefile(use_empty=True); " + getPythonPhotostoryOp(file->fileName()));
+    arguments << "--python-expr" << QString("import bpy; " + getPythonPhotostoryOp(file->fileName()));
     auto process = startBlender(arguments);
     if(!process) return false;
     process_data.push_back({process, file});

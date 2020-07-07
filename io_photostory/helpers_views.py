@@ -103,7 +103,7 @@ def enter_editmode(obj, execution_context=None):
 
     # with In3D():
     bpy.ops.object.select_all(execution_context, action='DESELECT')
-    bpy.context.scene.objects.active = obj
+    bpy.context.view_layer.objects.active = obj
     bpy.ops.object.mode_set(execution_context, mode='EDIT', toggle=False)
     return execution_context
 

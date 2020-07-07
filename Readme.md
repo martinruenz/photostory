@@ -9,7 +9,7 @@
 
 #### 1. Install dependencies
 
-* Install [Blender](https://blender.org) and make sure that the command `blender` can be executed in your terminal
+* Install [Blender](https://blender.org) >= 2.80 and make sure that the command `blender` can be executed in your terminal. For blender < 2.80 use [this commit](https://github.com/martinruenz/photostory/commit/d97a76fed7779727e683d0a72173a5f0651dbd2f).
 * Install Qt >= 5.9
 * **Optionally**, use *ffmpegthumbnailer*, which is used to show video thumbnails within the *photo-selector* application:
 ```

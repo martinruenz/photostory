@@ -1,4 +1,6 @@
 .idea/
+.vscode/
+build/
 io_photostory/__pycache__/
 *.blend1
 *.blend2

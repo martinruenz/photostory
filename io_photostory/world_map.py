@@ -50,7 +50,7 @@ def latlong_to_xy(lat, long, height, width):
 
 
 def get_path_length(path):
-    mesh = path.to_mesh(bpy.context.scene, True, "RENDER")
+    mesh = path.to_mesh()
     return sum((mesh.vertices[e.vertices[0]].co - mesh.vertices[e.vertices[1]].co).length for e in mesh.edges)
 
 
@@ -68,7 +68,7 @@ class WorldMap:
         if WorldMap.animation_dash_material is None:
             WorldMap.animation_dash_material = bpy.data.materials.new(name="animation_dash_material")
             WorldMap.animation_dash_material.specular_intensity = 0.2
-            WorldMap.animation_dash_material.diffuse_color = (0.85, 0.01, 0)
+            WorldMap.animation_dash_material.diffuse_color = (0.85, 0.01, 0.0, 1.0)
 
         # Create mesh and object
         mesh_data = create_plane_meshdata(width, height)
@@ -82,11 +82,13 @@ class WorldMap:
         # Create material
         material = bpy.data.materials.new(name="photo_material")
         material.specular_intensity = 0
-        mtex = material.texture_slots.add()
-        mtex.texture = texture
-        mtex.texture.extension = 'CLIP'
-        mtex.texture_coords = 'UV'
-        mtex.use_map_color_diffuse = True
+        if hasattr(material, 'texture_slots'):
+            # Internal
+            mtex = material.texture_slots.add()
+            mtex.texture = texture
+            mtex.texture.extension = 'CLIP'
+            mtex.texture_coords = 'UV'
+            mtex.use_map_color_diffuse = True
         self.object.data.materials.append(material)
 
         # Add nodes setup as well:
@@ -114,13 +116,14 @@ class WorldMap:
         mat_links.new(node_t.outputs['Alpha'], node_mix.inputs['Fac'])
         mat_links.new(node_mix.outputs['Shader'], node_om.inputs['Surface'])
 
-        # Internal
-        node_m = mat_nodes.new('ShaderNodeMaterial')
-        node_m.location = (0, 500)
-        node_m.material = material
-        node_o = mat_nodes.new('ShaderNodeOutput')
-        node_o.location = (300, 500)
-        mat_links.new(node_m.outputs['Color'], node_o.inputs['Color'])
+        if hasattr(bpy.types, 'ShaderNodeMaterial'):
+            # Internal
+            node_m = mat_nodes.new('ShaderNodeMaterial')
+            node_m.location = (0, 500)
+            node_m.material = material
+            node_o = mat_nodes.new('ShaderNodeOutput')
+            node_o.location = (300, 500)
+            mat_links.new(node_m.outputs['Color'], node_o.inputs['Color'])
 
         if displacement_texture is not None:
             # Add subdivide
@@ -146,7 +149,7 @@ class WorldMap:
             smooth = self.object.modifiers["worldmap_smooth"]
             smooth.factor = 1.5
 
-        bpy.context.scene.objects.link(self.object)
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(self.object)
 
     def get_local_coord(self, lat, long):
         x, y = latlong_to_xy(lat, long, self.height, self.width)
@@ -166,22 +169,18 @@ class WorldMap:
         offset = 0.05 * self.height
         unroll_meshdata, vs, ve = create_spiral_meshdata(offset=offset, rounds=rounds, extend=0.1 * self.height, invert_direction=False)
         self.unroll_spline = bpy.data.objects.new("unroll_spline", unroll_meshdata)
-        bpy.context.scene.objects.link(self.unroll_spline)
-        self.unroll_spline.select = True
-        bpy.context.scene.objects.active = self.unroll_spline
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(self.unroll_spline)
+        self.unroll_spline.select_set(True)
+        bpy.context.view_layer.objects.active = self.unroll_spline
         bpy.ops.object.convert(execution_context, target='CURVE')
-        bpy.ops.transform.rotate(execution_context, value=1.5*math.pi, axis=(1, 0, 0), constraint_axis=(True, False, False),
-                                 constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED',
-                                 proportional_edit_falloff='SMOOTH', proportional_size=1)
+        bpy.ops.transform.rotate(execution_context, value=1.5*math.pi, orient_axis='X', constraint_axis=(True, False, False))
 
         self.unroll_spline.data.transform(Matrix.Translation(-ve))
         unroll_spline_length = get_path_length(self.unroll_spline)
         self.unroll_spline.location = self.object.location + Vector((self.width, 0.5 * self.height, 1))
 
         s = self.width / unroll_spline_length
-        bpy.ops.transform.resize(execution_context, value=(s, s, s), constraint_axis=(False, False, False),
-                                 constraint_orientation='GLOBAL', mirror=False, proportional='DISABLED',
-                                 proportional_edit_falloff='SMOOTH', proportional_size=1)
+        bpy.ops.transform.resize(execution_context, value=(s, s, s))
 
         # Add modifier to map
         self.object.modifiers.new(name="unroll_curve", type='CURVE')
@@ -241,7 +240,8 @@ class WorldMap:
         sphere_marker.location = self.get_local_coord(lat, long)
         sphere_marker.parent = self.object
         sphere_marker.data.materials.append(WorldMap.animation_dash_material)
-        bpy.context.scene.objects.link(sphere_marker)
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(sphere_marker)
+
 
     def animate_route(self, locations, camera, current_frame, duration=-1):
         """
@@ -280,7 +280,8 @@ class WorldMap:
         curve = bpy.data.objects.new('route', curve_data)
         curve.parent = self.object
         spline_length = get_path_length(curve)
-        bpy.context.scene.objects.link(curve)
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(curve)
+
 
         # Create animation
 
@@ -303,24 +304,25 @@ class WorldMap:
         dash_object.data.materials.append(WorldMap.animation_dash_material)
         dash_object.parent = self.object
         self.routes.append(dash_object)
-        bpy.context.scene.objects.link(dash_object)
+        bpy.context.view_layer.active_layer_collection.collection.objects.link(dash_object)
+
 
         # Animate creation of dashes
-        bpy.context.scene.update()  # Make sure matrix_world is up-to-date
+        bpy.context.view_layer.update() # Make sure matrix_world is up-to-date
         array_mod.count = 0
         array_mod.keyframe_insert("count", index=-1, frame=current_frame)
-        camera.location = self.object.matrix_world * (locations[0] + Vector((0, 0, spline_length)))
+        camera.location = self.object.matrix_world @ (locations[0] + Vector((0, 0, spline_length)))
         camera.keyframe_insert("location", index=-1, frame=current_frame)
         current_frame += int(bpy.context.scene.render.fps * duration)
 
         array_mod.count = num_dashes
         array_mod.keyframe_insert("count", index=-1, frame=current_frame)
-        camera.location = self.object.matrix_world * (locations[len(locations)-1] + Vector((0, 0, spline_length)))
+        camera.location = self.object.matrix_world @ (locations[len(locations)-1] + Vector((0, 0, spline_length)))
         camera.keyframe_insert("location", index=-1, frame=current_frame)
 
         if True:
             current_frame += int(bpy.context.scene.render.fps * 3)
-            camera.location = self.object.matrix_world * (locations[len(locations) - 1] + Vector((0, 0, 4 * spline_length)))
+            camera.location = self.object.matrix_world @ (locations[len(locations) - 1] + Vector((0, 0, 4 * spline_length)))
             camera.keyframe_insert("location", index=-1, frame=current_frame)
 
 

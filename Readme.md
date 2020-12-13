@@ -4,6 +4,12 @@
 
 **Photostory** is a tool to generate slideshows using [Blender](http://www.blender.org). It can generate videos directly, but also offers a workflow for more customization.
 
+## Quickstart
+
+* `io_photostory` contains a blender addon that generates slideshows from **.json** description files.
+* `photo-selector` contains a GUI program to create such **.json** files easily -- alternatively, one can use a text-editor for this task.
+* To get a slideshow as quickly as possible, only install the addon ([see last installation step](#4-enable-io_photostory-addon-in-blender)).
+* Then select `File > Import > Photostory (.json)` in blender and choose the file `example/example.json`.
 
 ## Install
 

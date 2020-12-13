@@ -38,9 +38,6 @@ from bpy_extras.image_utils import load_image
 from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty, BoolProperty, FloatProperty
 
-# from layout_generator import *
-# import layout
-
 if "bpy" in locals():
     import importlib
 
@@ -57,10 +54,6 @@ from . import layout
 from . import world_map
 from .helpers_views import *
 from .helpers_geometry import *
-
-# from layout import *
-
-
 
 #
 # def is_video(path):
@@ -295,6 +288,8 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
         num_image_paths = 0
         for slide_desc in slides_desc["slides"]:
             if slide_desc["type"] == "photo_slide":
+                slide_desc["background_paths"] = [p if os.path.isabs(p) else os.path.join(os.path.dirname(self.properties.filepath), p) for p in slide_desc["background_paths"]]
+                slide_desc["foreground_paths"] = [p if os.path.isabs(p) else os.path.join(os.path.dirname(self.properties.filepath), p) for p in slide_desc["foreground_paths"]]
                 for image_path in chain(slide_desc["background_paths"], slide_desc["foreground_paths"]):
                     num_image_paths += 1
                     images_paths.add(image_path)
@@ -402,13 +397,17 @@ class PhotostoryImporter(bpy.types.Operator, ImportHelper):
         # print("The following {} frames are duplicates and don't have to be rendered:".format(len(self.duplicate_frames)), self.duplicate_frames)
         print("There are {} frames that are duplicates and don't have to be rendered.".format(len(self.duplicate_frames)))
         if self.properties.skip_duplicates and len(self.duplicate_frames) > 0:
-            bpy.context.scene.render.use_overwrite = False
-            print("Creating placeholder files ....")
-            for f in self.duplicate_frames:
-                p = bpy.context.scene.render.filepath + "{:04d}".format(f)
-                if bpy.context.scene.render.use_file_extension:
-                    p += bpy.context.scene.render.file_extension
-                open(p, 'a').close()
+            if os.path.exists(bpy.context.scene.render.filepath):
+                bpy.context.scene.render.use_overwrite = False
+                print("Creating placeholder files ....")
+                for f in self.duplicate_frames:
+                    p = bpy.context.scene.render.filepath + "{:04d}".format(f)
+                    if bpy.context.scene.render.use_file_extension:
+                        p += bpy.context.scene.render.file_extension
+                    open(p, 'a').close()
+            else:
+                print("WARNING: Unable to create placeholder files as output directoy does not exist:")
+                print(bpy.context.scene.render.filepath)
 
         print("Photostory ready!")
         return {'FINISHED'}

@@ -1,0 +1,28 @@
+{
+    "background": "White",
+    "slides": [
+        {
+            "type": "photo_slide",
+            "name": "slide-1",
+            "background_paths": [
+                "slide1_image1_bg.jpg"
+            ],
+            "foreground_paths": [
+                "slide1_image1_fg.jpg",
+                "slide1_image2_fg.jpg"
+            ]
+        },
+        {
+            "type": "photo_slide",
+            "name": "slide-2",
+            "background_paths": [
+                "slide2_image1_bg.jpg"
+            ],
+            "foreground_paths": [
+                "slide2_image1_fg.jpg",
+                "slide2_video1_fg.mp4"
+            ]
+        }
+    ],
+    "version": "0.1"
+}

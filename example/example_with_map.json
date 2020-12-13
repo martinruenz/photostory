@@ -1,0 +1,25 @@
+{
+    "background": "White",
+    "slides": [
+        {
+            "gps_coordinates": [
+                "51.509865, -0.118092",
+                "40.712776, -74.005974"
+            ],
+            "name": "slide-3",
+            "type": "gps_slide"
+        },
+        {
+            "type": "photo_slide",
+            "name": "slide-1",
+            "background_paths": [
+                "slide1_image1_bg.jpg"
+            ],
+            "foreground_paths": [
+                "slide1_image1_fg.jpg",
+                "slide1_image2_fg.jpg"
+            ]
+        }
+    ],
+    "version": "0.1"
+}

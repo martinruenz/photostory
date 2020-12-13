@@ -48,8 +48,8 @@ This will download a texture and height-map of the world for rendering maps.
 
 #### 4. Enable io_photostory addon in Blender
 
-* Either copy the directory *io_photostory* into the blender addons directory, or create a symbolic link, like: `ln -s io_photostory /path/to/blender/2.79/scripts/addons/`
-* Enable the addon in the Blender settings, as [described here](https://docs.blender.org/manual/en/dev/preferences/addons.html).
+* Either copy the directory *io_photostory* into the blender addons directory, or create a symbolic link, like: `ln -s io_photostory /path/to/blender/2.83/scripts/addons/`
+* Enable the addon in the Blender settings, as [described here](https://docs.blender.org/manual/en/latest/editors/preferences/addons.html).
 
 
 ## Usage
